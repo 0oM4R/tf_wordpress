@@ -4,3 +4,4 @@ exec: /bin/sh -xc "
           cd /;
           ./usr/local/bin/sql_entrypoint.sh mysqld --datadir /var/lib/mysql_tmp"
 test: /bin/sh -xc "mysqladmin ping"
+log: stdout

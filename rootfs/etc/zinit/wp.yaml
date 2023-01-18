@@ -4,3 +4,4 @@ exec: /bin/sh -xc "
 test: /bin/sh -xc "pidof apache2"
 after: 
   - mysql
+log: stdout
