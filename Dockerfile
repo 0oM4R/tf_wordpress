@@ -31,11 +31,10 @@ RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends ca-certificates wget; \
 	rm -rf /var/lib/apt/lists/*; \
+	wget https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit -O /sbin/zinit; \
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
 	wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-	wget https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit -O /sbin/zinit &&\
-	chmod +x /sbin/zinit \
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
 	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
@@ -240,12 +239,12 @@ RUN set -eux; \
 	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-$version.tar.gz"; \
 	echo "$sha1 *wordpress.tar.gz" | sha1sum -c -; \
 	\
-# upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
-	tar -xzf wordpress.tar.gz -C /usr/src/; \
+# upstream tarballs include ./wordpress/ so this gives us /var/www/html/wordpress
+	tar -xzf wordpress.tar.gz -C /var/www/html/; \
 	rm wordpress.tar.gz; \
 	\
 # https://wordpress.org/support/article/htaccess/
-	[ ! -e /usr/src/wordpress/.htaccess ]; \
+	[ ! -e /var/www/html/wordpress/.htaccess ]; \
 	{ \
 		echo '# BEGIN WordPress'; \
 		echo ''; \
@@ -258,26 +257,25 @@ RUN set -eux; \
 		echo 'RewriteRule . /index.php [L]'; \
 		echo ''; \
 		echo '# END WordPress'; \
-	} > /usr/src/wordpress/.htaccess; \
+	} > /var/www/html/wordpress/.htaccess; \
 	\
-	chown -R www-data:www-data /usr/src/wordpress; \
+	chown -R www-data:www-data /var/www/html/wordpress; \
 # pre-create wp-content (and single-level children) for folks who want to bind-mount themes, etc so permissions are pre-created properly instead of root:root
 # wp-content/cache: https://github.com/docker-library/wordpress/issues/534#issuecomment-705733507
 	mkdir wp-content; \
-	for dir in /usr/src/wordpress/wp-content/*/ cache; do \
+	for dir in /var/www/html/wordpress/wp-content/*/ cache; do \
 		dir="$(basename "${dir%/}")"; \
 		mkdir "wp-content/$dir"; \
 	done; \
 	chown -R www-data:www-data wp-content; \
 	chmod -R 777 wp-content
 
-VOLUME /var/www/html
 
-COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
+COPY --chown=www-data:www-data wp-config-docker.php /var/www/html/wordpress/
 COPY wp_entrypoint.sh /usr/local/bin/
 
 
-
+RUN chmod +x /sbin/zinit 
 ADD rootfs /    
 CMD ["/sbin/zinit", "init", "--container"]
 

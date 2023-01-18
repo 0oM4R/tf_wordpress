@@ -38,7 +38,7 @@ if [[ "$1" == apache2* ]] || [ "$1" = 'php-fpm' ]; then
 		sourceTarArgs=(
 			--create
 			--file -
-			--directory /usr/src/wordpress
+			--directory /var/www/html/wordpress/
 			--owner "$user" --group "$group"
 		)
 		targetTarArgs=(
@@ -52,12 +52,12 @@ if [[ "$1" == apache2* ]] || [ "$1" = 'php-fpm' ]; then
 		# loop over "pluggable" content in the source, and if it already exists in the destination, skip it
 		# https://github.com/docker-library/wordpress/issues/506 ("wp-content" persisted, "akismet" updated, WordPress container restarted/recreated, "akismet" downgraded)
 		for contentPath in \
-			/usr/src/wordpress/.htaccess \
-			/usr/src/wordpress/wp-content/*/*/ \
+			/var/www/html/wordpress/.htaccess \
+			/var/www/html/wordpress/wp-content/*/*/ \
 		; do
 			contentPath="${contentPath%/}"
 			[ -e "$contentPath" ] || continue
-			contentPath="${contentPath#/usr/src/wordpress/}" # "wp-content/plugins/akismet", etc.
+			contentPath="${contentPath#/var/www/html/wordpress/}" # "wp-content/plugins/akismet", etc.
 			if [ -e "$PWD/$contentPath" ]; then
 				echo >&2 "WARNING: '$PWD/$contentPath' exists! (not copying the WordPress version)"
 				sourceTarArgs+=( --exclude "./$contentPath" )
@@ -71,7 +71,7 @@ if [[ "$1" == apache2* ]] || [ "$1" = 'php-fpm' ]; then
 	if [ ! -s wp-config.php ] && [ "${#wpEnvs[@]}" -gt 0 ]; then
 		for wpConfigDocker in \
 			wp-config-docker.php \
-			/usr/src/wordpress/wp-config-docker.php \
+			/var/www/html/wordpress/wp-config-docker.php \
 		; do
 			if [ -s "$wpConfigDocker" ]; then
 				echo >&2 "No 'wp-config.php' found in $PWD, but 'WORDPRESS_...' variables supplied; copying '$wpConfigDocker' (${wpEnvs[*]})"
