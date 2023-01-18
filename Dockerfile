@@ -1,21 +1,22 @@
 # FROM mysql:latest as sql
-# ENV MYSQL_ROOT_PASSWORD=test \
-#     MYSQL_DATABASE=wordpress \
-#     MYSQL_USER=wordpress \
-#     MYSQL_PASSWORD=wordpress
 # RUN mkdir -p /var/lib/mysql_tmp
 
 # COPY . /
 # RUN ls /
 # FROM wordpress
 # COPY --from=sql / /
-# ENV WORDPRESS_DB_HOST=localhost:3306 \
-#     WORDPRESS_DB_USER=wordpress \
-#     WORDPRESS_DB_PASSWORD=wordpress \
-#     WORDPRESS_DB_NAME=wordpress
 # ENTRYPOINT ["/start.sh"]
 
 FROM php:8.0-apache
+
+ENV WORDPRESS_DB_HOST=localhost:3306 \
+    WORDPRESS_DB_USER=wordpress \
+    WORDPRESS_DB_PASSWORD=wordpress \
+    WORDPRESS_DB_NAME=wordpress \
+    MYSQL_ROOT_PASSWORD=test \
+    MYSQL_DATABASE=wordpress \
+    MYSQL_USER=wordpress \
+    MYSQL_PASSWORD=wordpress
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -272,6 +273,12 @@ VOLUME /var/www/html
 
 COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
 COPY wp_entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/wp_entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/wp_entrypoint.sh"]
-CMD ["apache2-foreground"]
+
+
+RUN wget https://github.com/threefoldtech/zinit/releases/download/v0.2.10/zinit -O /sbin/zinit &&\
+	chmod +x /sbin/zinit
+ADD rootfs /    
+CMD ["/sbin/zinit", "init", "--container"]
+
+# ENTRYPOINT ["/usr/local/bin/wp_entrypoint.sh"]
+# CMD ["apache2-foreground"]
