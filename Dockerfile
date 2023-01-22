@@ -46,6 +46,7 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends \
 		bzip2 \
 		openssl \
+		openssh-server\
 		perl \
 		xz-utils \
 		zstd; \
