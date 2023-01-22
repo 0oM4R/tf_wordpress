@@ -1,0 +1,5 @@
+exec: /bin/sh -xc "
+    chmod +x /usr/local/bin/docker-entrypoint.sh;
+    cd /var/www/html;
+    /usr/local/bin/docker-entrypoint.sh apache2-foreground"
+test: /bin/sh -xc "pidof apache2"
