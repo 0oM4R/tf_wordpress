@@ -1,4 +1,5 @@
 <?php
+if ( (!empty( $_SERVER['HTTP_X_FORWARDED_HOST'])) || (!empty( $_SERVER['HTTP_X_FORWARDED_FOR'])) ) { $_SERVER['HTTPS'] = 'on'; }
 /**
  * The base configuration for WordPress
  *

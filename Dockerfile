@@ -1,10 +1,6 @@
 FROM php:8.0-apache
 
-ENV WORDPRESS_DB_HOST=localhost:3306 \
-    WORDPRESS_DB_USER=wordpress \
-    WORDPRESS_DB_PASSWORD=wordpress \
-    WORDPRESS_DB_NAME=wordpress \
-    MYSQL_ROOT_PASSWORD=test \
+ENV MYSQL_ROOT_PASSWORD=test \
     MYSQL_DATABASE=wordpress \
     MYSQL_USER=wordpress \
     MYSQL_PASSWORD=wordpress \
@@ -178,8 +174,6 @@ RUN set -eux; \
 		echo 'opcache.revalidate_freq=2'; \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
-
 # https://wordpress.org/support/article/editing-wp-config-php/#configure-error-logging
 RUN { \
 		# https://www.php.net/manual/en/errorfunc.constants.php
@@ -221,12 +215,12 @@ RUN set -eux; \
 	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-$version.tar.gz"; \
 	echo "$sha1 *wordpress.tar.gz" | sha1sum -c -; \
 	\
-	# upstream tarballs include ./wordpress/ so this gives us /var/www/html/wordpress
-	tar -xzf wordpress.tar.gz -C /var/www/html/; \
+	# upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
+	tar -xzf wordpress.tar.gz -C /usr/src/; \
 	rm wordpress.tar.gz; \
 	\
 	# https://wordpress.org/support/article/htaccess/
-	[ ! -e /var/www/html/wordpress/.htaccess ]; \
+	[ ! -e /usr/src/wordpress/.htaccess ]; \
 	{ \
 		echo '# BEGIN WordPress'; \
 		echo ''; \
@@ -239,13 +233,13 @@ RUN set -eux; \
 		echo 'RewriteRule . /index.php [L]'; \
 		echo ''; \
 		echo '# END WordPress'; \
-	} > /var/www/html/wordpress/.htaccess; \
+	} > /usr/src/wordpress/.htaccess; \
 	\
-	chown -R www-data:www-data /var/www/html/wordpress; \
+	chown -R www-data:www-data /usr/src/wordpress; \
 	# pre-create wp-content (and single-level children) for folks who want to bind-mount themes, etc so permissions are pre-created properly instead of root:root
 	# wp-content/cache: https://github.com/docker-library/wordpress/issues/534#issuecomment-705733507
 	mkdir wp-content; \
-	for dir in /var/www/html/wordpress/wp-content/*/ cache; do \
+	for dir in /usr/src/wordpress/wp-content/*/ cache; do \
 		dir="$(basename "${dir%/}")"; \
 		mkdir "wp-content/$dir"; \
 	done; \
@@ -253,7 +247,7 @@ RUN set -eux; \
 	chmod -R 777 wp-content
 
 
-COPY --chown=www-data:www-data wp-config-docker.php /var/www/html/wordpress/
+COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
 COPY wp_entrypoint.sh /usr/local/bin/
 
 

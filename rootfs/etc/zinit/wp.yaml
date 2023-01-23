@@ -1,7 +1,7 @@
 exec: /bin/sh -xc "
     chmod +x /usr/local/bin/wp_entrypoint.sh;
-    ./usr/local/bin/wp_entrypoint.sh apache2-foreground"
+    cd /var/www/html;
+    /usr/local/bin/wp_entrypoint.sh apache2-foreground"
 test: /bin/sh -xc "pidof apache2"
 after: 
   - mysql
-log: stdout
