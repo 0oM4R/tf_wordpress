@@ -1,4 +1,5 @@
 exec: /bin/sh -xc "
+    export WORDPRESS_DB_HOST="$(hostname -i):3306"
     chmod +x /usr/local/bin/docker-entrypoint.sh;
     cd /var/www/html;
     /usr/local/bin/docker-entrypoint.sh apache2-foreground"

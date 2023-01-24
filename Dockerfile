@@ -1,6 +1,9 @@
 FROM php:8.0-apache
 
-ENV MYSQL_ROOT_PASSWORD=test \
+ENV WORDPRESS_DB_USER=wordpress \
+    WORDPRESS_DB_PASSWORD=wordpress \
+    WORDPRESS_DB_NAME=wordpress \
+	MYSQL_ROOT_PASSWORD=test \
     MYSQL_DATABASE=wordpress \
     MYSQL_USER=wordpress \
     MYSQL_PASSWORD=wordpress \
