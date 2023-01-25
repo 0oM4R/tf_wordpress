@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
+if [[ ! -v WORDPRESS_DB_HOST ]]; then
+	echo "WORDPRESS_DB_HOST not found, set it to MySQL Ip on this machine";
+	export WORDPRESS_DB_HOST="$(hostname -i):3306" ;
+fi
 
 if [[ "$1" == apache2* ]] || [ "$1" = 'php-fpm' ]; then
 	uid="$(id -u)"
