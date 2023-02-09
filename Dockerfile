@@ -236,6 +236,6 @@ COPY wp_entrypoint.sh /usr/local/bin/
 
 
 RUN chmod +x /sbin/zinit 
-ADD rootfs /    
+ADD zinit / /etc/zinit/    
 CMD ["/sbin/zinit", "init", "--container"]
 
