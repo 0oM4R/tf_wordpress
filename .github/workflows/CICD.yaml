@@ -21,7 +21,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
           push: true
-          tags: ${{secrets.DOCKER_USERNAME}}/wrodpress:${{env.version}}
+          tags: ${{secrets.DOCKER_USERNAME}}/wordpress:${{env.version}}
    
-    - name: Create flist
-      run: curl -X POST -d "image=${{secrets.DOCKER_USERNAME}}/wordpress:${{env.version}}" -H ${{ secrets.ZERO_HUB_TOKEN }} https://hub.grid.tf/api/flist/me/docker
+    # - name: Create flist
+    #   run: curl -X POST -d "image=${{secrets.DOCKER_USERNAME}}/wordpress:${{env.version}}" -H ${{ secrets.ZERO_HUB_TOKEN }} https://hub.grid.tf/api/flist/me/docker
