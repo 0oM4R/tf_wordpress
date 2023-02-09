@@ -1,0 +1,5 @@
+exec: /bin/bash  -c " set -x ; 
+      /usr/sbin/sshd;"
+test: /bin/bash -c "service ssh status"
+after: 
+  - ssh_config
