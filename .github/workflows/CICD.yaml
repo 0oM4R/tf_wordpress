@@ -1,0 +1,27 @@
+# workflow to build and push docker images and create its flist
+name: CICD
+on:
+  push:
+    branches: 
+      - development
+env: 
+   version: '0.0.1'
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    -
+      name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v3
+      with:
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/wrodpress:${{env.version}}
+   
+    - name: Create flist
+      run: curl -X POST -d "image=${{secrets.DOCKER_USERNAME}}/wordpress:${{env.version}}" -H ${{ secrets.ZERO_HUB_TOKEN }} https://hub.grid.tf/api/flist/me/docker
