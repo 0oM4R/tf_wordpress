@@ -36,6 +36,7 @@ RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
 		bzip2 \
+		ufw \
 		openssl \
 		openssh-server\
 		iproute2\
