@@ -1,7 +1,0 @@
-exec: /bin/sh -xc "
-          mkdir -p /var/lib/mysql_tmp;
-          chmod +x /usr/local/bin/sql_entrypoint.sh;
-          cd /;
-          ./usr/local/bin/sql_entrypoint.sh mysqld --datadir /var/lib/mysql_tmp"
-test: /bin/sh -xc "mysqladmin ping"
-log: stdout
