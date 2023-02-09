@@ -83,7 +83,6 @@ RUN { \
 COPY config/ /etc/mysql/
 COPY scripts/sql_entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/sql_entrypoint.sh /entrypoint.sh # backwards compat
-EXPOSE 3306 33060
 
 
 ################ install wordpress #######################
@@ -233,8 +232,8 @@ RUN set -eux; \
 
 COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
 COPY scripts/wp_entrypoint.sh /usr/local/bin/
-
+COPY scripts/ufw.sh /usr/local/bin/
 
 RUN chmod +x /sbin/zinit 
-ADD zinit / /etc/zinit/    
+ADD zinit  /etc/zinit/    
 CMD ["/sbin/zinit", "init", "--container"]

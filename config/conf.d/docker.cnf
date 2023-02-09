@@ -1,3 +1,5 @@
 [mysqld]
+bind-address            = 127.0.0.1
+mysqlx-bind-address     = 127.0.0.1
 skip-host-cache
 skip-name-resolve
