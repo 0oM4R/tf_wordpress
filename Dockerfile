@@ -81,7 +81,7 @@ RUN { \
 
 # Config files
 COPY config/ /etc/mysql/
-COPY sql_entrypoint.sh /usr/local/bin/
+COPY scripts/sql_entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/sql_entrypoint.sh /entrypoint.sh # backwards compat
 EXPOSE 3306 33060
 
@@ -232,10 +232,9 @@ RUN set -eux; \
 
 
 COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
-COPY wp_entrypoint.sh /usr/local/bin/
+COPY scripts/wp_entrypoint.sh /usr/local/bin/
 
 
 RUN chmod +x /sbin/zinit 
 ADD zinit / /etc/zinit/    
 CMD ["/sbin/zinit", "init", "--container"]
-
