@@ -43,6 +43,16 @@ or use the dedicated Wordpress weblet if available, which will deploy an instanc
 
 > TODO: add terraform example file
 
+## Flist
+
+### URL
+
+````
+https://hub.grid.tf/kassem.3bot/0om4r-wordpress-0.0.1.flist
+````
+
+> TODO: should be updated to official repo.
+
 ### Entrypoint
 
 - `/sbin/zinit init`
@@ -78,9 +88,9 @@ or use the dedicated Wordpress weblet if available, which will deploy an instanc
 - `WORDPRESS_DB_HOST`= the database host address.
   - _Default_: `172.0.0.1`
 - `WORDPRESS_DB_USER` = `MYSQL_USER`
-- WORDPRESS_DB_PASSWORD= `MYSQL_PASSWORD`
-- WORDPRESS_DB_NAME= `MYSQL_DATABASE_NAME`
-- WORDPRESS_TABLE_PREFIX= database tables prefix
+- `WORDPRESS_DB_PASSWORD`= `MYSQL_PASSWORD`
+- `WORDPRESS_DB_NAME`= `MYSQL_DATABASE_NAME`
+- `WORDPRESS_TABLE_PREFIX`= database tables prefix
   - _Default_: `wp_`
   
-For full list of the ENV vars check the official [Wordpress](https://hub.docker.com/_/wordpress) and [MySQL](https://hub.docker.com/_/mysql) Docker images
+For full list of the ENV vars check the official [Wordpress](https://hub.docker.com/_/wordpress) and [MySQL](https://hub.docker.com/_/mysql) Docker images.
