@@ -1,5 +1,4 @@
 exec: /bin/sh -c "
-  sleep 5;
   mkdir -p /var/run/sshd;
   mkdir -p /root/.ssh/;
   chmod 600 ~/.ssh;
