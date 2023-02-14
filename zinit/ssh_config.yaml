@@ -1,4 +1,4 @@
-exec: /bin/sh -c "
+exec: /bin/bash -euxo pipefail -c"
   mkdir -p /var/run/sshd;
   mkdir -p /root/.ssh/;
   chmod 600 ~/.ssh;
@@ -7,5 +7,4 @@ exec: /bin/sh -c "
   chmod 600 ~/.ssh/authorized_keys;
   echo $SSH_KEY > /root/.ssh/authorized_keys;
   echo 'ssh configred'"
-test: stat /root/.ssh/authorized_keys
 oneshot: true

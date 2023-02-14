@@ -1,4 +1,4 @@
-exec: /bin/sh -xc "
+exec: /bin/bash -euxo pipefail -c "
     chmod +x /usr/local/bin/ufw.sh;
     /usr/local/bin/ufw.sh;"
 oneshot: true
