@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - development
+      - main
 env: 
    version: '0.0.1'
 jobs:
