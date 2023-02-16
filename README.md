@@ -25,7 +25,7 @@ This image Based on php:8.0-apache which is also Debian based.
 
 in the grid3/wordpress directory
 
-`docker build -t {user|org}/grid3_taiga_docker:latest .`
+`docker build -t {user|org}/grid3_wordpress_docker:latest .`
 
 ## Deploying on grid 3
 
